@@ -1,6 +1,6 @@
 class AppAssets {
-  static const String appHorizontalLogo = 'assets/images/app_horizontalLogo.png';
-  static const String appVerticalLogo = 'assets/images/app_verticalLogo.png';
+  static const String appHorizontalLogo = 'assets/images/app_horizontal_logo.png';
+  static const String appVerticalLogo = 'assets/images/app_vertical_logo.png';
   static const String home = 'assets/images/home.png';
   static const String homeActive = 'assets/images/home_active.png';
   static const String love = 'assets/images/love.png';
@@ -14,6 +14,7 @@ class AppAssets {
   static const String route = 'assets/images/route.png';
   static const String sport = 'assets/images/sport.png';
   static const String splashBranding = 'assets/images/splash_branding.png';
+  static const String splash = 'assets/images/splash.png';
 }
 class AppSvg {
   static const String icEmail = 'assets/images/svg/ic_email.svg';
