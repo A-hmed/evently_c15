@@ -1,0 +1,11 @@
+{
+  "@@locale": "ar",
+  "emailHint": "البريد الإلكتروني",
+  "passwordHint": "كلمة المرور",
+  "forgotPassword": "نسيت كلمة المرور",
+  "loginButton": "تسجيل الدخول",
+  "noAccount": "ليس لديك حساب؟",
+  "createAccount": "إنشاء حساب",
+  "or": "أو",
+  "loginWithGoogle": "تسجيل الدخول باستخدام جوجل"
+}
