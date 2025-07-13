@@ -30,7 +30,9 @@ abstract final class AppTheme {
         fontWeight: FontWeight.bold,
       ),
       titleMedium: TextStyle(
-          fontSize: 20, color: AppColors.blue, fontWeight: FontWeight.w500));
+          fontSize: 20, color: AppColors.blue, fontWeight: FontWeight.w500),
+      labelSmall: const TextStyle(
+          fontSize: 16, color: AppColors.black, fontWeight: FontWeight.w500));
 
   static final lightDefaultTextBoarder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(16),
@@ -71,7 +73,7 @@ abstract final class AppTheme {
       dividerTheme: DividerThemeData(color: AppColors.blue, thickness: 1));
 
   static ThemeData darkTheme = ThemeData(
-      scaffoldBackgroundColor: AppColors.white,
+      scaffoldBackgroundColor: AppColors.dartPurple,
       primaryColor: AppColors.blue,
       colorScheme: ColorScheme.fromSeed(seedColor: AppColors.blue),
       textTheme: _dartTextTheme,
@@ -82,7 +84,10 @@ abstract final class AppTheme {
                   bottomLeft: Radius.circular(16),
                   bottomRight: Radius.circular(16)))),
       elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(backgroundColor: AppColors.blue)),
+          style: ElevatedButton.styleFrom(backgroundColor: AppColors.blue, textStyle: TextStyle(
+              color: AppColors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w500))),
       inputDecorationTheme: InputDecorationTheme(
         border: darkDefaultTextBoarder,
         focusedBorder: darkDefaultTextBoarder,

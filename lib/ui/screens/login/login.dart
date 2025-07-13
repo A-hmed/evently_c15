@@ -1,9 +1,13 @@
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:evently_c15/l10n/app_localizations.dart';
+import 'package:evently_c15/ui/providers/theme_provider.dart';
+import 'package:evently_c15/ui/providers/language_provider.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
 import 'package:evently_c15/ui/utils/app_colors.dart';
 import 'package:evently_c15/ui/widgets/custom_button.dart';
 import 'package:evently_c15/ui/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({
@@ -17,15 +21,17 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   late AppLocalizations l10n;
 
+
   @override
   Widget build(BuildContext context) {
+    languageProvider = Provider.of(context);
+    themeProvider = Provider.of(context);
     l10n = AppLocalizations.of(context)!;
     return SafeArea(
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
                 height: 24,
@@ -58,8 +64,15 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: 24,
               ),
-              buildGoogleLogin(),
+               //buildGoogleLogin(),
+              SizedBox(
+                height: 24,
+              ),
               buildLanguageToggle(),
+              SizedBox(
+                height: 24,
+              ),
+              buildThemeToggle()
             ],
           ),
         ),
@@ -99,11 +112,15 @@ class _LoginState extends State<Login> {
         ],
       );
 
-  buildForgetPasswordText(BuildContext context) => Text(
-        l10n.forgetPassword,
-        textAlign: TextAlign.end,
-        style: Theme.of(context).textTheme.labelMedium!.copyWith(
-            fontStyle: FontStyle.italic, decoration: TextDecoration.underline),
+  buildForgetPasswordText(BuildContext context) => Container(
+        width: double.infinity,
+        child: Text(
+          l10n.forgetPassword,
+          textAlign: TextAlign.end,
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              fontStyle: FontStyle.italic,
+              decoration: TextDecoration.underline),
+        ),
       );
 
   buildLoginButton() => CustomButton(text: l10n.loginButton, onClick: () {});
@@ -124,13 +141,38 @@ class _LoginState extends State<Login> {
         ],
       );
 
-  buildGoogleLogin() => CustomButton(
-        text: l10n.forgetPassword,
-        icon: Icon(Icons.social_distance_outlined),
-        onClick: () {},
-        backgroundColor: AppColors.white,
-        textColor: AppColors.blue,
+  buildGoogleLogin() => ElevatedButton(
+       child: Text(l10n.loginWithGoogle),
+        onPressed: (){},
+        // text: ,
+        // icon: Icon(Icons.social_distance_outlined),
+        // onClick: () {},
+        // backgroundColor: AppColors.white,
+        // textColor: AppColors.blue,
       );
 
-  buildLanguageToggle() => Container();
+  late LanguageProvider languageProvider;
+
+  late ThemeProvider themeProvider;
+
+  buildLanguageToggle() => AnimatedToggleSwitch<String>.dual(
+    current: languageProvider.currentLocale,
+    iconBuilder: (language) =>
+        Image.asset(language == "ar" ? AppAssets.icEg : AppAssets.icUsa),
+    first: "ar",
+    second: "en",
+    onChanged: (language) {
+      languageProvider.changeLanguage(language);
+    },
+  );
+
+  buildThemeToggle() => AnimatedToggleSwitch<ThemeMode>.dual(
+    current: themeProvider.mode,
+    iconBuilder: (mode) => Icon(mode == ThemeMode.dark? Icons.dark_mode: Icons.light_mode),
+    first: ThemeMode.light,
+    second: ThemeMode.dark,
+    onChanged: (mode) {
+      themeProvider.changeMode(mode);
+    },
+  );
 }
