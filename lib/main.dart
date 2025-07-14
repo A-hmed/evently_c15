@@ -1,5 +1,6 @@
 import 'package:evently_c15/ui/providers/theme_provider.dart';
 import 'package:evently_c15/ui/providers/language_provider.dart';
+import 'package:evently_c15/ui/screens/home/home.dart';
 import 'package:evently_c15/ui/screens/splash/splash.dart';
 import 'package:evently_c15/ui/utils/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
         Locale('en'),
         Locale('ar'),
       ],
-      home: const Splash(),
+      home: const Home(),
     );
   }
 }
