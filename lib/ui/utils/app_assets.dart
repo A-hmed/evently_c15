@@ -21,4 +21,5 @@ class AppAssets {
 class AppSvg {
   static const String icEmail = 'assets/images/svg/ic_email.svg';
   static const String icPassword = 'assets/images/svg/ic_password.svg';
+  static const String icTitle = 'assets/images/svg/ic_title.svg';
 }

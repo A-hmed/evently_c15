@@ -47,11 +47,10 @@ abstract final class AppTheme {
       colorScheme: ColorScheme.fromSeed(seedColor: AppColors.blue),
       textTheme: _lightTextTheme,
       appBarTheme: AppBarTheme(
-          backgroundColor: AppColors.blue,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(16),
-                  bottomRight: Radius.circular(16)))),
+          backgroundColor: Colors.transparent,
+        centerTitle: true,
+        titleTextStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w400, color: AppColors.blue)
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.blue,

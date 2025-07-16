@@ -1,3 +1,4 @@
+import 'package:evently_c15/ui/screens/add_event/add_event.dart';
 import 'package:evently_c15/ui/screens/home/home.dart';
 import 'package:evently_c15/ui/screens/login/login.dart';
 import 'package:evently_c15/ui/screens/register/register.dart';
@@ -14,5 +15,9 @@ abstract final class AppRoutes {
 
   static Route get register {
     return MaterialPageRoute(builder: (_) => const Register());
+  }
+
+  static Route get addEvent {
+    return MaterialPageRoute(builder: (_) => const AddEvent());
   }
 }

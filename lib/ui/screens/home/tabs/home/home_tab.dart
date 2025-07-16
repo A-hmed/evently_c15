@@ -1,6 +1,8 @@
+import 'package:evently_c15/model/category_dm.dart';
 import 'package:evently_c15/model/event_dm.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
 import 'package:evently_c15/ui/utils/app_colors.dart';
+import 'package:evently_c15/ui/widgets/category_tabs.dart';
 import 'package:evently_c15/ui/widgets/event_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +27,9 @@ class HomeTab extends StatelessWidget {
         child: Column(
           children: [
             buildUserInfo(),
+            SizedBox(
+              height: 8,
+            ),
             buildCategoriesTabs(),
           ],
         ),
@@ -69,7 +74,16 @@ class HomeTab extends StatelessWidget {
         ],
       );
 
-  buildCategoriesTabs() => Container();
+  buildCategoriesTabs() => CategoryTabs(
+        categories: CategoryDM.homeCategories,
+        onTabSelected: (category) {
+          print(category.title);
+        },
+        selectedTabBg: AppColors.white,
+        selectedTabTextColor: AppColors.blue,
+        unselectedTabBg: AppColors.blue,
+        unselectedTabTextColor: AppColors.white,
+      );
 
   buildEventsList() => ListView.builder(
       itemCount: 20,

@@ -4,6 +4,7 @@ import 'package:evently_c15/ui/screens/home/tabs/map/map_tab.dart';
 import 'package:evently_c15/ui/screens/home/tabs/profile/profile_tab.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
 import 'package:evently_c15/ui/utils/app_colors.dart';
+import 'package:evently_c15/ui/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -68,8 +69,10 @@ class _HomeState extends State<Home> {
 
   buildFab() => FloatingActionButton(
         backgroundColor: AppColors.blue,
-        child: const Icon(Icons.add),
         shape: StadiumBorder(side: BorderSide(color: Colors.white, width: 2)),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, AppRoutes.addEvent);
+        },
+        child: const Icon(Icons.add),
       );
 }
