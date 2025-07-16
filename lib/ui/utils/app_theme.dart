@@ -12,7 +12,7 @@ abstract final class AppTheme {
   static ThemeData lightTheme = ThemeData(
       scaffoldBackgroundColor: AppColors.white,
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.purple,
+        backgroundColor: AppColors.blue,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(20),
@@ -30,13 +30,13 @@ abstract final class AppTheme {
           style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                side: BorderSide(color: AppColors.purple),
+                side: BorderSide(color: AppColors.blue),
               ),
-              backgroundColor: AppColors.purple,
+              backgroundColor: AppColors.blue,
               padding: EdgeInsets.symmetric(vertical: 16))),
       textTheme: TextTheme(
           labelMedium: TextStyle(
-            color: AppColors.purple,
+            color: AppColors.blue,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -48,13 +48,13 @@ abstract final class AppTheme {
           titleMedium: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              color: AppColors.purple),
+              color: AppColors.blue),
           titleSmall: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
               color: AppColors.white)),
       dividerTheme: DividerThemeData(
-        color: AppColors.purple,
+        color: AppColors.blue,
       ));
 
   static ThemeData darkTheme = ThemeData(
@@ -78,11 +78,11 @@ abstract final class AppTheme {
           style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: AppColors.purple),
+        side: BorderSide(color: AppColors.blue),
       ))),
       textTheme: TextTheme(
           labelMedium: TextStyle(
-            color: AppColors.purple,
+            color: AppColors.blue,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -94,7 +94,7 @@ abstract final class AppTheme {
           titleMedium: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              color: AppColors.purple),
+              color: AppColors.blue),
           titleSmall: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,

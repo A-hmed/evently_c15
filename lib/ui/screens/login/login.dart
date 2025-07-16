@@ -1,8 +1,12 @@
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:evently_c15/l10n/app_localizations.dart';
+import 'package:evently_c15/ui/providers/language_provider.dart';
+import 'package:evently_c15/ui/providers/theme_provider.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
 import 'package:evently_c15/ui/utils/app_colors.dart';
 import 'package:evently_c15/ui/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -14,12 +18,13 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
+    languageProvider = Provider.of(context);
+    themeProvider = Provider.of(context);
     return SafeArea(
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
                 height: 18,
@@ -57,6 +62,7 @@ class _LoginState extends State<Login> {
                 height: 24,
               ),
               buildLanguageToggle(),
+              buildThemeToggle(),
             ],
           ),
         ),
@@ -80,19 +86,26 @@ class _LoginState extends State<Login> {
         isPassword: true,
       );
 
-  buildForgotPassword() => Text(
-        AppLocalizations.of(context)!.forgotPassword,
-        textAlign: TextAlign.end,
-        style: Theme.of(context).textTheme.labelMedium!.copyWith(
-            fontStyle: FontStyle.italic, decoration: TextDecoration.underline),
+  buildForgotPassword() => SizedBox(
+        width: double.infinity,
+        child: Text(
+          AppLocalizations.of(context)!.forgotPassword,
+          textAlign: TextAlign.end,
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              fontStyle: FontStyle.italic,
+              decoration: TextDecoration.underline),
+        ),
       );
 
-  buildLoginButton() => ElevatedButton(
-      onPressed: () {},
-      child: Text(
-        AppLocalizations.of(context)!.loginButton,
-        style: Theme.of(context).textTheme.titleSmall,
-      ));
+  buildLoginButton() => SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+            onPressed: () {},
+            child: Text(
+              AppLocalizations.of(context)!.loginButton,
+              style: Theme.of(context).textTheme.titleSmall,
+            )),
+      );
 
   buildSignUpRow() => Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -142,5 +155,33 @@ class _LoginState extends State<Login> {
         ],
       ));
 
-  buildLanguageToggle() => Container();
+  late LanguageProvider languageProvider;
+
+  buildLanguageToggle() => Directionality(
+        textDirection: TextDirection.ltr,
+        child: AnimatedToggleSwitch<String>.dual(
+          current: languageProvider.locale,
+          first: "en",
+          second: "ar",
+          onChanged: (code) {
+            languageProvider.changeLanguage(code);
+          },
+          iconBuilder: (code) =>
+              Image.asset(code == "en" ? AppAssets.icUsa : AppAssets.icEg),
+        ),
+      );
+
+  late ThemeProvider themeProvider;
+  buildThemeToggle() => Directionality(
+        textDirection: TextDirection.ltr,
+        child: AnimatedToggleSwitch<ThemeMode>.dual(
+          current: themeProvider.currentMode,
+          first: ThemeMode.light,
+          second: ThemeMode.dark,
+          onChanged: (mode) {
+            themeProvider.changeMode(mode);
+          },
+          iconBuilder: (mode) => Icon(mode == ThemeMode.light? Icons.light_mode: Icons.dark_mode),
+        ),
+      );
 }
