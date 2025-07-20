@@ -3,6 +3,7 @@ import 'package:evently_c15/ui/providers/language_provider.dart';
 import 'package:evently_c15/ui/screens/add_event/add_event.dart';
 import 'package:evently_c15/ui/screens/home/home.dart';
 import 'package:evently_c15/ui/screens/login/login.dart';
+import 'package:evently_c15/ui/screens/register/register.dart';
 import 'package:evently_c15/ui/screens/splash/splash.dart';
 import 'package:evently_c15/ui/utils/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,10 +16,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: FirebaseOptions(
-        apiKey: "AIzaSyBir_qd6FDZPLZnOQi6tN1C0TNadr3VbgY",
-        appId: "1:132585537654:android:3df09b57eec8e74a5e9f57",
+        apiKey: "AIzaSyDf7oO7fF7We7ChS4aknvi8i-7fVSb1PiA",
+        appId: "1:361454085331:android:e5a178fc60a76c143b6026",
         messagingSenderId: "",
-        projectId: "evently-c15-online"),
+        projectId: "evently-mon-c13"),
   );
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => ThemeProvider()),

@@ -1,6 +1,11 @@
 import 'package:evently_c15/ui/utils/app_assets.dart';
+import 'package:evently_c15/ui/utils/app_routes.dart';
+import 'package:evently_c15/ui/utils/dialog_utils.dart';
+import 'package:evently_c15/ui/widgets/custom_button.dart';
 import 'package:evently_c15/ui/widgets/custom_text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 class Register extends StatefulWidget {
   const Register({super.key});
 
@@ -9,6 +14,11 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController rePasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,17 +34,19 @@ class _RegisterState extends State<Register> {
               height: MediaQuery.of(context).size.height * 0.25,
             ),
             CustomTextField(
-              hint: 'Email',
-              isPassword: true,
+              hint: 'User name',
+              controller: userNameController,
             ),
             const SizedBox(height: 16),
             CustomTextField(
               hint: 'Email',
+              controller: emailController,
             ),
             const SizedBox(height: 16),
             CustomTextField(
               hint: 'Password',
               isPassword: true,
+              controller: passwordController,
             ),
             const SizedBox(height: 16),
             CustomTextField(
@@ -65,12 +77,26 @@ class _RegisterState extends State<Register> {
   }
 
   Widget buildCreateAccountButton(BuildContext context) => SizedBox(
-    width: double.infinity,
-    child: ElevatedButton(
-        onPressed: () {},
-        child: Text(
-          "Register",
-          style: Theme.of(context).textTheme.titleSmall,
-        )),
-  );
+        width: double.infinity,
+        child: CustomButton(
+          onClick: () async {
+            showLoading(context);
+            try{
+              var userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+              Navigator.pop(context); ///Hide loadingx
+              Navigator.push(context, AppRoutes.login);
+            }on FirebaseAuthException catch(e){
+              var message = "Something went wrong, Please try again later!";
+              if (e.code == 'weak-password') {
+                message = 'The password provided is too weak.';
+              } else if (e.code == 'email-already-in-use') {
+                message = 'The account already exists for that email.';
+              }
+              Navigator.pop(context);///Hide loading
+              showMessage(context, content: message, posButtonTitle: "ok");
+            }
+          },
+          text: "Register",
+        ),
+      );
 }

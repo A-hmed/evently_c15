@@ -4,8 +4,11 @@ import 'package:evently_c15/ui/providers/theme_provider.dart';
 import 'package:evently_c15/ui/providers/language_provider.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
 import 'package:evently_c15/ui/utils/app_colors.dart';
+import 'package:evently_c15/ui/utils/app_routes.dart';
+import 'package:evently_c15/ui/utils/dialog_utils.dart';
 import 'package:evently_c15/ui/widgets/custom_button.dart';
 import 'package:evently_c15/ui/widgets/custom_text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +23,8 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   late AppLocalizations l10n;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
 
   @override
@@ -89,6 +94,7 @@ class _LoginState extends State<Login> {
         child: CustomTextField(
           hint: l10n.emailHint,
           prefixIcon: AppSvg.icEmail,
+          controller: emailController,
         ),
       );
 
@@ -97,6 +103,7 @@ class _LoginState extends State<Login> {
           hint: l10n.passwordHint,
           prefixIcon: AppSvg.icPassword,
           isPassword: true,
+          controller: passwordController,
         ),
       );
 
@@ -105,10 +112,15 @@ class _LoginState extends State<Login> {
         children: [
           Text(l10n.dontHaveAccount,
               style: Theme.of(context).textTheme.labelSmall),
-          Text(l10n.createAccount,
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  fontStyle: FontStyle.italic,
-                  decoration: TextDecoration.underline)),
+          InkWell(
+            onTap: (){
+              Navigator.push(context, AppRoutes.register);
+            },
+            child: Text(l10n.createAccount,
+                style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    fontStyle: FontStyle.italic,
+                    decoration: TextDecoration.underline)),
+          ),
         ],
       );
 
@@ -123,7 +135,19 @@ class _LoginState extends State<Login> {
         ),
       );
 
-  buildLoginButton() => CustomButton(text: l10n.loginButton, onClick: () {});
+  buildLoginButton() => CustomButton(text: l10n.loginButton, onClick: () async {
+    //TODO: Add validation for email and password
+    showLoading(context);
+    try{
+      var userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+      Navigator.pop(context); ///Hide loadingx
+      Navigator.push(context, AppRoutes.login);
+    }on FirebaseAuthException catch(e){
+      var message = e.message ?? "Something went wrong, Please try again later!";
+      Navigator.pop(context);///Hide loading
+      showMessage(context, content: message, posButtonTitle: "ok");
+    }
+  });
 
   buildOrRow() => Row(
         children: [
