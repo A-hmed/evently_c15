@@ -1,5 +1,6 @@
 class AppAssets {
-  static const String appHorizontalLogo = 'assets/images/app_horizontal_logo.png';
+  static const String appHorizontalLogo =
+      'assets/images/app_horizontal_logo.png';
   static const String appVerticalLogo = 'assets/images/app_vertical_logo.png';
   static const String home = 'assets/images/home.png';
   static const String homeActive = 'assets/images/home_active.png';
@@ -17,9 +18,10 @@ class AppAssets {
   static const String splash = 'assets/images/splash.png';
   static const String icEg = 'assets/images/ic_eg.png';
   static const String icUsa = 'assets/images/ic_usa.png';
-
 }
+
 abstract final class AppSvg {
   static const String icEmail = 'assets/images/svg/ic_email.svg';
   static const String icPassword = 'assets/images/svg/ic_password.svg';
+  static const String icTitle = 'assets/images/svg/ic_title.svg';
 }

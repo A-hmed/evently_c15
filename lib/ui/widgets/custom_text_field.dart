@@ -5,11 +5,13 @@ class CustomTextField extends StatefulWidget {
   final String? prefixIcon;
   final String hint;
   final bool isPassword;
+  final int minLines;
 
   const CustomTextField(
       {super.key,
       this.prefixIcon,
       required this.hint,
+      this.minLines = 1,
       this.isPassword = false});
 
   @override
@@ -22,6 +24,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      minLines: widget.minLines,
+      maxLines: widget.minLines + 1,
       decoration: InputDecoration(
           hintText: widget.hint,
           prefixIcon: widget.prefixIcon != null

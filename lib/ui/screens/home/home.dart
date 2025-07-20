@@ -4,6 +4,7 @@ import 'package:evently_c15/ui/screens/home/tabs/map_tab/map_tab.dart';
 import 'package:evently_c15/ui/screens/home/tabs/profile_tab/profile_tab.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
 import 'package:evently_c15/ui/utils/app_colors.dart';
+import 'package:evently_c15/ui/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -21,15 +22,17 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: tabs[currentIndex],
-      floatingActionButton: buildFloatingActionButton(),
+      floatingActionButton: buildFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: buildBottomNavigationBar(),
     );
   }
 
-  FloatingActionButton buildFloatingActionButton() {
+  FloatingActionButton buildFAB() {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(context, AppRoutes.addEvent);
+      },
       backgroundColor: AppColors.blue,
       shape: StadiumBorder(side: BorderSide(color: Colors.white, width: 3)),
       child: Icon(

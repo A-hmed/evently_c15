@@ -12,11 +12,9 @@ abstract final class AppTheme {
   static ThemeData lightTheme = ThemeData(
       scaffoldBackgroundColor: AppColors.white,
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.blue,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(20),
-                bottomLeft: Radius.circular(20))),
+        backgroundColor: AppColors.white,
+        centerTitle: true,
+        titleTextStyle: TextStyle(color: AppColors.blue, fontSize: 22),
         elevation: 0,
       ),
       inputDecorationTheme: InputDecorationTheme(
