@@ -1,21 +1,24 @@
+import 'package:evently_c15/model/category_dm.dart';
+import 'package:flutter/material.dart';
+
 class EventDM {
+  String id;
   String title;
-  String image;
-  String date;
-  bool isFavorite;
+  String categoryId;
+  DateTime date;
   String description;
-  String time;
-  double lat;
-  double lng;
+  TimeOfDay time;
+  double? lat;
+  double? lng;
 
   EventDM({
+    required this.id,
     required this.title,
-    required this.image,
+    required this.categoryId,
     required this.date,
-    required this.isFavorite,
     required this.description,
     required this.time,
-    required this.lat,
-    required this.lng,
+    this.lat,
+    this.lng,
   });
 }
