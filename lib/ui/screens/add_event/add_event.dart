@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently_c15/data/firestore_utils.dart';
 import 'package:evently_c15/model/category_dm.dart';
 import 'package:evently_c15/model/event_dm.dart';
+import 'package:evently_c15/model/user_dm.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
 import 'package:evently_c15/ui/utils/app_colors.dart';
 import 'package:evently_c15/ui/utils/dialog_utils.dart';
@@ -28,21 +28,22 @@ class _AddEventState extends State<AddEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          spacing: 16,
-          children: [
-            buildCategoryImage(),
-            buildCategoryTabs(),
-            buildTitleTextField(),
-            buildDescriptionTextField(),
-            buildEventDate(),
-            buildEventTime(),
-            buildEventLocation(),
-            Spacer(),
-            buildAddEventButton()
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            spacing: 16,
+            children: [
+              buildCategoryImage(),
+              buildCategoryTabs(),
+              buildTitleTextField(),
+              buildDescriptionTextField(),
+              buildEventDate(),
+              buildEventTime(),
+              buildEventLocation(),
+              buildAddEventButton()
+            ],
+          ),
         ),
       ),
     );
@@ -55,7 +56,7 @@ class _AddEventState extends State<AddEvent> {
   buildCategoryImage() => ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Image.asset(
-          AppAssets.appHorizontalLogo,
+          selectedCategory.image,
           height: MediaQuery.of(context).size.height * 0.25,
         ),
       );
@@ -64,6 +65,7 @@ class _AddEventState extends State<AddEvent> {
         categories: CategoryDM.createEventsCategories,
         onTabSelected: (category) {
           selectedCategory = category;
+          setState(() {});
         },
         selectedTabBg: AppColors.blue,
         selectedTabTextColor: AppColors.white,
@@ -178,14 +180,18 @@ class _AddEventState extends State<AddEvent> {
       text: "Add event",
       onClick: () async {
         showLoading(context);
+        selectedDate = DateTime(selectedDate.year, selectedDate.month,
+            selectedDate.day, selectedTime.hour, selectedTime.minute);
         EventDM eventDM = EventDM(
             id: "",
+            //This id is retrieved from firestore
             title: titleController.text,
             categoryId: selectedCategory.title,
             date: selectedDate,
             description: descriptionController.text,
-            time: selectedTime);
+            ownerId: UserDM.currentUser!.id);
         await addEventToFirestore(eventDM);
-        Navigator.pop(context);
+        Navigator.pop(context); // hide loading
+        Navigator.pop(context); // Close screen
       });
 }

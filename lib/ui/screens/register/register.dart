@@ -1,3 +1,5 @@
+import 'package:evently_c15/data/firestore_utils.dart';
+import 'package:evently_c15/model/user_dm.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
 import 'package:evently_c15/ui/utils/app_routes.dart';
 import 'package:evently_c15/ui/utils/dialog_utils.dart';
@@ -81,18 +83,30 @@ class _RegisterState extends State<Register> {
         child: CustomButton(
           onClick: () async {
             showLoading(context);
-            try{
-              var userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-              Navigator.pop(context); ///Hide loadingx
-              Navigator.push(context, AppRoutes.login);
-            }on FirebaseAuthException catch(e){
+            try {
+              var userCredential = await FirebaseAuth.instance
+                  .createUserWithEmailAndPassword(
+                      email: emailController.text,
+                      password: passwordController.text);
+              UserDM.currentUser = UserDM(
+                  id: userCredential.user!.uid,
+                  name: userNameController.text,
+                  email: emailController.text,
+                  favoriteEvents: []);
+              addUserToFirestore(UserDM.currentUser!);
+              Navigator.pop(context);
+              ///Hide loading
+              Navigator.push(context, AppRoutes.home);
+            } on FirebaseAuthException catch (e) {
               var message = "Something went wrong, Please try again later!";
               if (e.code == 'weak-password') {
                 message = 'The password provided is too weak.';
               } else if (e.code == 'email-already-in-use') {
                 message = 'The account already exists for that email.';
               }
-              Navigator.pop(context);///Hide loading
+              Navigator.pop(context);
+
+              ///Hide loading
               showMessage(context, content: message, posButtonTitle: "ok");
             }
           },

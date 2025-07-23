@@ -1,5 +1,7 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:evently_c15/data/firestore_utils.dart';
 import 'package:evently_c15/l10n/app_localizations.dart';
+import 'package:evently_c15/model/user_dm.dart';
 import 'package:evently_c15/ui/providers/theme_provider.dart';
 import 'package:evently_c15/ui/providers/language_provider.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
@@ -25,7 +27,6 @@ class _LoginState extends State<Login> {
   late AppLocalizations l10n;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,7 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: 24,
               ),
-               //buildGoogleLogin(),
+              //buildGoogleLogin(),
               SizedBox(
                 height: 24,
               ),
@@ -113,7 +114,7 @@ class _LoginState extends State<Login> {
           Text(l10n.dontHaveAccount,
               style: Theme.of(context).textTheme.labelSmall),
           InkWell(
-            onTap: (){
+            onTap: () {
               Navigator.push(context, AppRoutes.register);
             },
             child: Text(l10n.createAccount,
@@ -135,19 +136,30 @@ class _LoginState extends State<Login> {
         ),
       );
 
-  buildLoginButton() => CustomButton(text: l10n.loginButton, onClick: () async {
-    //TODO: Add validation for email and password
-    showLoading(context);
-    try{
-      var userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-      Navigator.pop(context); ///Hide loadingx
-      Navigator.push(context, AppRoutes.login);
-    }on FirebaseAuthException catch(e){
-      var message = e.message ?? "Something went wrong, Please try again later!";
-      Navigator.pop(context);///Hide loading
-      showMessage(context, content: message, posButtonTitle: "ok");
-    }
-  });
+  buildLoginButton() => CustomButton(
+      text: l10n.loginButton,
+      onClick: () async {
+        showLoading(context);
+        try {
+          var userCredential = await FirebaseAuth.instance
+              .signInWithEmailAndPassword(
+                  email: emailController.text,
+                  password: passwordController.text);
+          UserDM.currentUser =
+              await getFromUserFirestore(userCredential.user!.uid);
+          Navigator.pop(context);
+
+          ///Hide loadingx
+          Navigator.pushReplacement(context, AppRoutes.home);
+        } on FirebaseAuthException catch (e) {
+          var message =
+              e.message ?? "Something went wrong, Please try again later!";
+          Navigator.pop(context);
+
+          ///Hide loading
+          showMessage(context, content: message, posButtonTitle: "ok");
+        }
+      });
 
   buildOrRow() => Row(
         children: [
@@ -166,8 +178,8 @@ class _LoginState extends State<Login> {
       );
 
   buildGoogleLogin() => ElevatedButton(
-       child: Text(l10n.loginWithGoogle),
-        onPressed: (){},
+        child: Text(l10n.loginWithGoogle),
+        onPressed: () {},
         // text: ,
         // icon: Icon(Icons.social_distance_outlined),
         // onClick: () {},
@@ -180,23 +192,24 @@ class _LoginState extends State<Login> {
   late ThemeProvider themeProvider;
 
   buildLanguageToggle() => AnimatedToggleSwitch<String>.dual(
-    current: languageProvider.currentLocale,
-    iconBuilder: (language) =>
-        Image.asset(language == "ar" ? AppAssets.icEg : AppAssets.icUsa),
-    first: "ar",
-    second: "en",
-    onChanged: (language) {
-      languageProvider.changeLanguage(language);
-    },
-  );
+        current: languageProvider.currentLocale,
+        iconBuilder: (language) =>
+            Image.asset(language == "ar" ? AppAssets.icEg : AppAssets.icUsa),
+        first: "ar",
+        second: "en",
+        onChanged: (language) {
+          languageProvider.changeLanguage(language);
+        },
+      );
 
   buildThemeToggle() => AnimatedToggleSwitch<ThemeMode>.dual(
-    current: themeProvider.mode,
-    iconBuilder: (mode) => Icon(mode == ThemeMode.dark? Icons.dark_mode: Icons.light_mode),
-    first: ThemeMode.light,
-    second: ThemeMode.dark,
-    onChanged: (mode) {
-      themeProvider.changeMode(mode);
-    },
-  );
+        current: themeProvider.mode,
+        iconBuilder: (mode) =>
+            Icon(mode == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode),
+        first: ThemeMode.light,
+        second: ThemeMode.dark,
+        onChanged: (mode) {
+          themeProvider.changeMode(mode);
+        },
+      );
 }

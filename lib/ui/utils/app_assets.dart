@@ -17,6 +17,11 @@ class AppAssets {
   static const String splash = 'assets/images/splash.png';
   static const String icEg = 'assets/images/ic_eg.png';
   static const String icUsa = 'assets/images/ic_usa.png';
+  static const String eventBirthday = 'assets/images/event_birthday.png';
+  static const String eventBookingClub = 'assets/images/event_booking_club.png';
+  static const String eventGaming = 'assets/images/event_gaming.png';
+  static const String eventHoliday = 'assets/images/event_holiday.png';
+  static const String eventSport = 'assets/images/event_sport.png';
 }
 class AppSvg {
   static const String icEmail = 'assets/images/svg/ic_email.svg';

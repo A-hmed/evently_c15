@@ -16,44 +16,50 @@ class CategoryDM {
     CategoryDM(
         icon: Icons.sports_handball,
         title: "Sports",
-        image: AppAssets.appHorizontalLogo),
+        image: AppAssets.eventSport),
     CategoryDM(
         icon: Icons.holiday_village,
         title: "Holiday",
-        image: AppAssets.appHorizontalLogo),
+        image: AppAssets.eventHoliday),
     CategoryDM(
         icon: Icons.meeting_room,
         title: "Meeting",
-        image: AppAssets.appHorizontalLogo),
+        image: AppAssets.eventGaming),
     CategoryDM(
         icon: Icons.cake,
         title: "Birthday",
-        image: AppAssets.appHorizontalLogo),
+        image: AppAssets.eventBirthday),
     CategoryDM(
         icon: Icons.book_online,
         title: "Booking Club",
-        image: AppAssets.appHorizontalLogo),
+        image: AppAssets.eventBookingClub),
   ];
   static List<CategoryDM> createEventsCategories = [
     CategoryDM(
         icon: Icons.sports_handball,
         title: "Sports",
-        image: AppAssets.appHorizontalLogo),
+        image: AppAssets.eventSport),
     CategoryDM(
         icon: Icons.holiday_village,
         title: "Holiday",
-        image: AppAssets.appHorizontalLogo),
+        image: AppAssets.eventHoliday),
     CategoryDM(
         icon: Icons.meeting_room,
         title: "Meeting",
-        image: AppAssets.appHorizontalLogo),
+        image: AppAssets.eventGaming),
     CategoryDM(
         icon: Icons.cake,
         title: "Birthday",
-        image: AppAssets.appHorizontalLogo),
+        image: AppAssets.eventBirthday),
     CategoryDM(
         icon: Icons.book_online,
         title: "Booking Club",
-        image: AppAssets.appHorizontalLogo),
+        image: AppAssets.eventBookingClub),
   ];
+
+  static CategoryDM fromTitle(String title){
+    return homeCategories.firstWhere((category){
+      return title == category.title;
+    });
+  }
 }
