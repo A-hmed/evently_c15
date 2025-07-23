@@ -14,26 +14,33 @@ class AddEvent extends StatefulWidget {
 }
 
 class _AddEventState extends State<AddEvent> {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  CategoryDM selectedCategory = CategoryDM.addEventCategories[0];
+  DateTime selectedDate = DateTime.now();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(title: const Text('Add Event')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: 16,
-          children: [
-            buildCategoryImage(),
-            buildCategoriesTabs(),
-            buildTitleTextField(),
-            buildDescriptionTextField(),
-            buildDateRow(),
-            buildTimeRow(),
-            buildLocationTextField(),
-            buildCreateButton(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 16,
+            children: [
+              buildCategoryImage(),
+              buildCategoriesTabs(),
+              buildTitleTextField(),
+              buildDescriptionTextField(),
+              buildDateRow(),
+              buildTimeRow(),
+              buildLocationTextField(),
+              buildCreateButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -51,7 +58,7 @@ class _AddEventState extends State<AddEvent> {
   buildCategoriesTabs() => CategoriesTabs(
       categories: CategoryDM.addEventCategories,
       onChanged: (category) {
-        print(category.name);
+        selectedCategory = category;
       },
       selectedTextColor: AppColors.white,
       unselectedTextColor: AppColors.blue,
@@ -95,31 +102,39 @@ class _AddEventState extends State<AddEvent> {
         ],
       );
 
-  buildDateRow() => Row(
-        children: [
-          Icon(
-            Icons.calendar_month_outlined,
-          ),
-          SizedBox(
-            width: 4,
-          ),
-          Text(
-            "Event Date",
-            style: TextStyle(
-                fontSize: 16,
-                color: AppColors.black,
-                fontWeight: FontWeight.w500),
-          ),
-          Spacer(),
-          Text(
-            "Choose Date",
-            style: TextStyle(
-                fontSize: 16,
-                color: AppColors.blue,
-                fontWeight: FontWeight.w500),
-          )
-        ],
-      );
+  buildDateRow() => InkWell(
+    onTap: () async{
+     selectedDate = (await showDatePicker(context: context,
+          firstDate: DateTime.now(),
+          initialDate: selectedDate,
+          lastDate: DateTime.now().add(Duration(days: 365)),)) ??selectedDate;
+    },
+    child: Row(
+          children: [
+            Icon(
+              Icons.calendar_month_outlined,
+            ),
+            SizedBox(
+              width: 4,
+            ),
+            Text(
+              "Event Date",
+              style: TextStyle(
+                  fontSize: 16,
+                  color: AppColors.black,
+                  fontWeight: FontWeight.w500),
+            ),
+            Spacer(),
+            Text(
+              "Choose Date",
+              style: TextStyle(
+                  fontSize: 16,
+                  color: AppColors.blue,
+                  fontWeight: FontWeight.w500),
+            )
+          ],
+        ),
+  );
 
   buildTimeRow() => Row(
         children: [

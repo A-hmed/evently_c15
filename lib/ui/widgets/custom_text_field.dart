@@ -6,11 +6,13 @@ class CustomTextField extends StatefulWidget {
   final String hint;
   final bool isPassword;
   final int minLines;
+  final TextEditingController? controller;
 
   const CustomTextField(
       {super.key,
       this.prefixIcon,
       required this.hint,
+      this.controller,
       this.minLines = 1,
       this.isPassword = false});
 
@@ -24,8 +26,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: widget.controller,
       minLines: widget.minLines,
-      maxLines: widget.minLines + 1,
+      maxLines: widget.isPassword ? 1 : widget.minLines + 1,
       decoration: InputDecoration(
           hintText: widget.hint,
           prefixIcon: widget.prefixIcon != null
@@ -33,12 +36,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   margin: EdgeInsets.symmetric(horizontal: 16),
                   child: SvgPicture.asset(widget.prefixIcon!))
               : null,
-          suffixIcon: widget.isPassword ? InkWell(
-              onTap: (){
-                obscureText = !obscureText;
-                setState(() {});
-              },
-              child: Icon(obscureText ? Icons.remove_red_eye: Icons.visibility_off)) : null),
+          suffixIcon: widget.isPassword
+              ? InkWell(
+                  onTap: () {
+                    obscureText = !obscureText;
+                    setState(() {});
+                  },
+                  child: Icon(obscureText
+                      ? Icons.remove_red_eye
+                      : Icons.visibility_off))
+              : null),
       obscureText: widget.isPassword ? obscureText : false,
     );
   }

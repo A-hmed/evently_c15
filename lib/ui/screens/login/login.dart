@@ -4,7 +4,10 @@ import 'package:evently_c15/ui/providers/language_provider.dart';
 import 'package:evently_c15/ui/providers/theme_provider.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
 import 'package:evently_c15/ui/utils/app_colors.dart';
+import 'package:evently_c15/ui/utils/app_routes.dart';
+import 'package:evently_c15/ui/utils/dialog_utils.dart';
 import 'package:evently_c15/ui/widgets/custom_text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +19,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     languageProvider = Provider.of(context);
@@ -24,46 +30,48 @@ class _LoginState extends State<Login> {
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 18,
-              ),
-              buildAppLogo(),
-              SizedBox(
-                height: 24,
-              ),
-              buildEmailTextField(),
-              SizedBox(
-                height: 16,
-              ),
-              buildPasswordTextField(),
-              SizedBox(
-                height: 16,
-              ),
-              buildForgotPassword(),
-              SizedBox(
-                height: 24,
-              ),
-              buildLoginButton(),
-              SizedBox(
-                height: 24,
-              ),
-              buildSignUpRow(),
-              SizedBox(
-                height: 24,
-              ),
-              buildOrRow(),
-              SizedBox(
-                height: 24,
-              ),
-              buildGoogleLoginButton(),
-              SizedBox(
-                height: 24,
-              ),
-              buildLanguageToggle(),
-              buildThemeToggle(),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 18,
+                ),
+                buildAppLogo(),
+                SizedBox(
+                  height: 24,
+                ),
+                buildEmailTextField(),
+                SizedBox(
+                  height: 16,
+                ),
+                buildPasswordTextField(),
+                SizedBox(
+                  height: 16,
+                ),
+                buildForgotPassword(),
+                SizedBox(
+                  height: 24,
+                ),
+                buildLoginButton(),
+                SizedBox(
+                  height: 24,
+                ),
+                buildSignUpRow(),
+                SizedBox(
+                  height: 24,
+                ),
+                buildOrRow(),
+                SizedBox(
+                  height: 24,
+                ),
+                buildGoogleLoginButton(),
+                SizedBox(
+                  height: 24,
+                ),
+                buildLanguageToggle(),
+                buildThemeToggle(),
+              ],
+            ),
           ),
         ),
       ),
@@ -78,12 +86,14 @@ class _LoginState extends State<Login> {
   buildEmailTextField() => CustomTextField(
         prefixIcon: AppSvg.icEmail,
         hint: AppLocalizations.of(context)!.emailHint,
+        controller: _emailController,
       );
 
   buildPasswordTextField() => CustomTextField(
         prefixIcon: AppSvg.icPassword,
         hint: AppLocalizations.of(context)!.passwordHint,
         isPassword: true,
+        controller: _passwordController,
       );
 
   buildForgotPassword() => SizedBox(
@@ -100,7 +110,24 @@ class _LoginState extends State<Login> {
   buildLoginButton() => SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () async {
+               try {
+              showLoading(context);
+
+             var userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  email: _emailController.text,
+                  password: _passwordController.text);
+
+              Navigator.pop(context);
+              Navigator.push(context, AppRoutes.home);
+              } on FirebaseAuthException catch (e) {
+                Navigator.pop(context);
+                showMessage(context,
+                    message:
+                        e.message ?? "Something went wrong, Please try again",
+                    posButtonText: "Ok");
+              }
+            },
             child: Text(
               AppLocalizations.of(context)!.loginButton,
               style: Theme.of(context).textTheme.titleSmall,
@@ -172,6 +199,7 @@ class _LoginState extends State<Login> {
       );
 
   late ThemeProvider themeProvider;
+
   buildThemeToggle() => Directionality(
         textDirection: TextDirection.ltr,
         child: AnimatedToggleSwitch<ThemeMode>.dual(
@@ -181,7 +209,8 @@ class _LoginState extends State<Login> {
           onChanged: (mode) {
             themeProvider.changeMode(mode);
           },
-          iconBuilder: (mode) => Icon(mode == ThemeMode.light? Icons.light_mode: Icons.dark_mode),
+          iconBuilder: (mode) => Icon(
+              mode == ThemeMode.light ? Icons.light_mode : Icons.dark_mode),
         ),
       );
 }

@@ -3,6 +3,8 @@ import 'package:evently_c15/ui/providers/language_provider.dart';
 import 'package:evently_c15/ui/providers/theme_provider.dart';
 import 'package:evently_c15/ui/screens/add_event/add_event.dart';
 import 'package:evently_c15/ui/screens/home/home.dart';
+import 'package:evently_c15/ui/screens/login/login.dart';
+import 'package:evently_c15/ui/screens/register/register.dart';
 import 'package:evently_c15/ui/screens/splash/splash.dart';
 import 'package:evently_c15/ui/utils/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
