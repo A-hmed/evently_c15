@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:evently_c15/ui/providers/theme_provider.dart';
 import 'package:evently_c15/ui/providers/language_provider.dart';
 import 'package:evently_c15/ui/screens/add_event/add_event.dart';
@@ -11,8 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
-
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: FirebaseOptions(

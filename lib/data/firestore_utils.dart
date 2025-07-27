@@ -30,15 +30,19 @@ Future<void> addEventToFirestore(EventDM event) async {
 }
 
 //
-Future<List<EventDM>> getAllEventsFromFirestore() async {
+Stream<List<EventDM>> getAllEventsFromFirestore() {
   var eventsCollection =
       FirebaseFirestore.instance.collection(EventDM.collectionName);
-  var querySnapshot = await eventsCollection.get();
-  List<EventDM> events = querySnapshot.docs.map((docSnapshot) {
-    var json = docSnapshot.data();
-    return EventDM.fromJson(json);
-  }).toList();
-  return events;
+  Stream<QuerySnapshot<Map<String, dynamic>>> stream =
+      eventsCollection.snapshots();
+
+  return stream.map((querySnapshot) {
+    List<EventDM> events = querySnapshot.docs.map((docSnapshot) {
+      var json = docSnapshot.data();
+      return EventDM.fromJson(json);
+    }).toList();
+    return events;
+  });
 }
 
 Future<List<EventDM>> getFavoriteEvents() async {

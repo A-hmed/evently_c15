@@ -65,7 +65,6 @@ class _EventWidgetState extends State<EventWidget> {
       );
 
   String getMonthName(int month) {
-    print(month);
     const List<String> months = [
       'jan',
       'feb',

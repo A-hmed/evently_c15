@@ -1,4 +1,5 @@
 import 'package:evently_c15/data/firestore_utils.dart';
+import 'package:evently_c15/main.dart';
 import 'package:evently_c15/model/category_dm.dart';
 import 'package:evently_c15/model/event_dm.dart';
 import 'package:evently_c15/model/user_dm.dart';
@@ -17,7 +18,7 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   CategoryDM selectedCategory = CategoryDM.homeCategories[0];
-
+  int number = 0;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -50,7 +51,7 @@ class _HomeTabState extends State<HomeTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Welcome Back ✨",
+                "Welcome Back ✨ $number",
                 style: TextStyle(fontSize: 14, color: Colors.white),
               ),
               Text(
@@ -95,8 +96,8 @@ class _HomeTabState extends State<HomeTab> {
         unselectedTabTextColor: AppColors.white,
       );
 
-  buildEventsList() => FutureBuilder(
-      future: getAllEventsFromFirestore(),
+  buildEventsList() => StreamBuilder(
+      stream: getAllEventsFromFirestore(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(child: Text(snapshot.error.toString()));
