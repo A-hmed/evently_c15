@@ -1,7 +1,11 @@
+import 'package:evently_c15/data/firestore_helper.dart';
 import 'package:evently_c15/l10n/app_localizations.dart';
 import 'package:evently_c15/ui/model/category_dm.dart';
+import 'package:evently_c15/ui/model/event_dm.dart';
+import 'package:evently_c15/ui/model/user_dm.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
 import 'package:evently_c15/ui/utils/app_colors.dart';
+import 'package:evently_c15/ui/utils/dialog_utils.dart';
 import 'package:evently_c15/ui/widgets/categories_tabs.dart';
 import 'package:evently_c15/ui/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +22,7 @@ class _AddEventState extends State<AddEvent> {
   TextEditingController descriptionController = TextEditingController();
   CategoryDM selectedCategory = CategoryDM.addEventCategories[0];
   DateTime selectedDate = DateTime.now();
-
+  TimeOfDay selectedTime = TimeOfDay.now();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +55,7 @@ class _AddEventState extends State<AddEvent> {
       child: Container(
           color: Colors.black,
           child: Image.asset(
-            AppAssets.appHorizontalLogo,
+            selectedCategory.image,
             height: MediaQuery.of(context).size.height * .25,
           )));
 
@@ -59,6 +63,7 @@ class _AddEventState extends State<AddEvent> {
       categories: CategoryDM.addEventCategories,
       onChanged: (category) {
         selectedCategory = category;
+        setState(() {});
       },
       selectedTextColor: AppColors.white,
       unselectedTextColor: AppColors.blue,
@@ -78,7 +83,11 @@ class _AddEventState extends State<AddEvent> {
           SizedBox(
             height: 8,
           ),
-          CustomTextField(prefixIcon: AppSvg.icTitle, hint: "Event Title"),
+          CustomTextField(
+            prefixIcon: AppSvg.icTitle,
+            hint: "Event Title",
+            controller: titleController,
+          ),
         ],
       );
 
@@ -98,18 +107,22 @@ class _AddEventState extends State<AddEvent> {
           CustomTextField(
             hint: "Event Description",
             minLines: 5,
+            controller: descriptionController,
           ),
         ],
       );
 
   buildDateRow() => InkWell(
-    onTap: () async{
-     selectedDate = (await showDatePicker(context: context,
-          firstDate: DateTime.now(),
-          initialDate: selectedDate,
-          lastDate: DateTime.now().add(Duration(days: 365)),)) ??selectedDate;
-    },
-    child: Row(
+        onTap: () async {
+          selectedDate = (await showDatePicker(
+                context: context,
+                firstDate: DateTime.now(),
+                initialDate: selectedDate,
+                lastDate: DateTime.now().add(Duration(days: 365)),
+              )) ??
+              selectedDate;
+        },
+        child: Row(
           children: [
             Icon(
               Icons.calendar_month_outlined,
@@ -134,39 +147,60 @@ class _AddEventState extends State<AddEvent> {
             )
           ],
         ),
-  );
+      );
 
-  buildTimeRow() => Row(
-        children: [
-          Icon(Icons.access_time),
-          SizedBox(
-            width: 4,
-          ),
-          Text("Event Time",
+  buildTimeRow() => InkWell(
+        onTap: () async {
+          selectedTime = (await showTimePicker(
+                  context: context, initialTime: selectedTime)) ??
+              selectedTime;
+        },
+        child: Row(
+          children: [
+            Icon(Icons.access_time),
+            SizedBox(
+              width: 4,
+            ),
+            Text("Event Time",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppColors.black,
+                )),
+            Spacer(),
+            Text(
+              "Choose Time",
               style: TextStyle(
-                fontSize: 16,
-                color: AppColors.black,
-              )),
-          Spacer(),
-          Text(
-            "Choose Time",
-            style: TextStyle(
-                fontSize: 16,
-                color: AppColors.blue,
-                fontWeight: FontWeight.w500),
-          )
-        ],
+                  fontSize: 16,
+                  color: AppColors.blue,
+                  fontWeight: FontWeight.w500),
+            )
+          ],
+        ),
       );
 
   buildLocationTextField() => Container();
 
   buildCreateButton() => SizedBox(
-    width: double.infinity,
-    child: ElevatedButton(
-        onPressed: () {},
-        child: Text(
-          "Add Event",
-          style: Theme.of(context).textTheme.titleSmall,
-        )),
-  );
+        width: double.infinity,
+        child: ElevatedButton(
+            onPressed: () async{
+              selectedDate = DateTime(selectedDate.year, selectedDate.month,
+                  selectedDate.day, selectedTime.hour, selectedTime.minute);
+              var event = EventDM(
+                  title: titleController.text,
+                  date: selectedDate,
+                  id: '',
+                  ownerId: UserDM.currentUser!.id,
+                  description: descriptionController.text,
+                  category: selectedCategory.name);
+              showLoading(context);
+              await addEventToFirestore(event);
+              Navigator.pop(context); // hide loading
+              Navigator.pop(context); // close page
+            },
+            child: Text(
+              "Add Event",
+              style: Theme.of(context).textTheme.titleSmall,
+            )),
+      );
 }

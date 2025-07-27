@@ -1,5 +1,7 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:evently_c15/data/firestore_helper.dart';
 import 'package:evently_c15/l10n/app_localizations.dart';
+import 'package:evently_c15/ui/model/user_dm.dart';
 import 'package:evently_c15/ui/providers/language_provider.dart';
 import 'package:evently_c15/ui/providers/theme_provider.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
@@ -111,15 +113,18 @@ class _LoginState extends State<Login> {
         width: double.infinity,
         child: ElevatedButton(
             onPressed: () async {
-               try {
-              showLoading(context);
+              try {
+                showLoading(context);
 
-             var userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                  email: _emailController.text,
-                  password: _passwordController.text);
+                var userCredential = await FirebaseAuth.instance
+                    .signInWithEmailAndPassword(
+                        email: _emailController.text,
+                        password: _passwordController.text);
+                var user = await getUserFromFirestore(userCredential.user!.uid);
+                UserDM.currentUser = user;
+                Navigator.pop(context);
+                Navigator.push(context, AppRoutes.home);
 
-              Navigator.pop(context);
-              Navigator.push(context, AppRoutes.home);
               } on FirebaseAuthException catch (e) {
                 Navigator.pop(context);
                 showMessage(context,
@@ -134,19 +139,24 @@ class _LoginState extends State<Login> {
             )),
       );
 
-  buildSignUpRow() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.noAccount,
-            style: Theme.of(context).textTheme.labelSmall,
-          ),
-          Text(AppLocalizations.of(context)!.createAccount,
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                  fontStyle: FontStyle.italic,
-                  decoration: TextDecoration.underline)),
-        ],
-      );
+  buildSignUpRow() => InkWell(
+    onTap: (){
+      Navigator.push(context, AppRoutes.register);
+    },
+    child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.noAccount,
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+            Text(AppLocalizations.of(context)!.createAccount,
+                style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    fontStyle: FontStyle.italic,
+                    decoration: TextDecoration.underline)),
+          ],
+        ),
+  );
 
   buildOrRow() => Row(
         children: [

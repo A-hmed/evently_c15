@@ -1,3 +1,5 @@
+import 'package:evently_c15/data/firestore_helper.dart';
+import 'package:evently_c15/ui/model/user_dm.dart';
 import 'package:evently_c15/ui/utils/app_assets.dart';
 import 'package:evently_c15/ui/utils/app_routes.dart';
 import 'package:evently_c15/ui/utils/dialog_utils.dart';
@@ -82,10 +84,13 @@ class _RegisterState extends State<Register> {
             onPressed: () async {
               try {
                 showLoading(context);
-
-                await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                var userCreds = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                     email: _emailController.text,
                     password: _passwordController.text);
+                var user = UserDM(id: userCreds.user!.uid, name: _usernameController.text,
+                    email: _emailController.text);
+                addUserToFirestore(user);
+                UserDM.currentUser = user;
                 Navigator.pop(context);
                 Navigator.push(context, AppRoutes.home);
               } on FirebaseAuthException catch (e) {
