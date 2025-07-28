@@ -1,4 +1,5 @@
 import 'package:evently_c15/data/firestore_helper.dart';
+import 'package:evently_c15/main.dart';
 import 'package:evently_c15/ui/model/category_dm.dart';
 import 'package:evently_c15/ui/model/user_dm.dart';
 import 'package:evently_c15/ui/utils/app_colors.dart';
@@ -23,8 +24,8 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  buildEventsList() => FutureBuilder(
-      future: getAllEventsFromFirestore(),
+  buildEventsList() => StreamBuilder(
+     stream: getAllEventsFromFirestore(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text(snapshot.error.toString());

@@ -21,14 +21,16 @@ Future<UserDM> getUserFromFirestore(String id) async {
 }
 
 //
-Future<List<EventDM>> getAllEventsFromFirestore() async {
+Stream<List<EventDM>> getAllEventsFromFirestore() {
   var eventsCollection =
       FirebaseFirestore.instance.collection(EventDM.collectionName);
-  var querySnapshot = await eventsCollection.get();
-  return querySnapshot.docs.map((querySnapshot) {
-    var json = querySnapshot.data();
-    return EventDM.fromJson(json);
-  }).toList();
+  var querySnapshotStream = eventsCollection.snapshots();
+  return querySnapshotStream.map((querySnapshot) {
+   return querySnapshot.docs.map((querySnapshot) {
+      var json = querySnapshot.data();
+      return EventDM.fromJson(json);
+    }).toList();
+  });
 }
 
 //
